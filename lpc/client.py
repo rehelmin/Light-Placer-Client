@@ -7,9 +7,9 @@ import logging
 
 @click.group()
 @click.option("--port", help="Specify the serial device name")
-@click.option("--baud", default=115200, help="Specify the serial baud rate")
-@click.option("--bits", default=8, help="Specify the number of data bits")
-@click.option("--stop", default=1, help="Number of stop bits")
+@click.option("--baud", type=int, help="Specify the serial baud rate")
+@click.option("--bits", type=int, help="Specify the number of data bits")
+@click.option("--stop", type=int, help="Number of stop bits")
 @click.option("--loglevel", help="Specify a logging level")
 @click.pass_context
 def cli(ctx, port, baud, bits, stop, loglevel):
