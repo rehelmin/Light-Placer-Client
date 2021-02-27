@@ -1,7 +1,26 @@
 # Light Placer LED Controller Client
 Use this client to talk to an LED controller through serial. The client is called from the command line like so:
 
-`lp send --settings_file "settings.json" --address 1 --bin 6 --red 255 --green 255 --blue 255`
+`lpc --settings_file "settings.json" send --address 1 --bin 6 --red 255 --green 255 --blue 255`
+
+## Installing lpc
+From the root directory, run the following command to install `lpc`:
+
+`pip install .`
+
+This *should* put an `lpc` executable into your python Scripts directory. It would be good to make sure the python Scripts directory is on your system path. If it is you should then be able to make a call to `lpc` from anywhere.
+
+In order to avoid having to use the `--port`, `--baud`, etc flags on every call you can put the following into a json file and point to it using an environment variable called LPC_SETTINGS_PATH. If that environment variable exists then lpc will use it to define the serial port settings. You can then eliminate the `--settings_file` flag in the above call as well.
+
+```
+{
+    "port": "COM6",
+    "baud": 115200,
+    "data_bits": 8,
+    "stop_bits": 1,
+    "parity": "None"
+}
+```
 
 
 ## Light Placer Serial Protocol
