@@ -3,6 +3,7 @@ import click
 import json
 import struct
 import os
+import logging
 
 @click.group()
 @click.option("--port", help="Specify the serial device name")
@@ -27,6 +28,7 @@ def cli(ctx, port, baud, bits, stop):
 @click.argument('blue', type=int)
 def send(ctx, address, bin_number, red, green, blue):
 	packet = struct.pack("BBBBBc", address, bin_number, red, green, blue, "\n".encode("UTF8"))
+	logging.debug("Sending the following packet: {} to Address {}".format(packet, address))
 	click.echo(packet)
 
 
