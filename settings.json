@@ -1,5 +1,5 @@
 {
-	"port": "COM6",
+	"port": "COM4",
 	"baud": 115200,
 	"data_bits": 8,
 	"stop_bits": 1,
