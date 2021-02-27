@@ -4,9 +4,6 @@ import json
 import struct
 import os
 
-
-#sp = serial.Serial("")
-
 @click.group()
 @click.option("--port", help="Specify the serial device name")
 @click.option("--baud", default=115200, help="Specify the serial baud rate")
@@ -15,8 +12,8 @@ import os
 @click.pass_context
 def cli(ctx, port, baud, bits, stop):
 
-	if "LP_SETTINGS_PATH" in os.environ:
-		with open(os.environ["LP_SETTINGS_PATH"], "r") as f:
+	if "LPC_SETTINGS_PATH" in os.environ:
+		with open(os.environ["LPC_SETTINGS_PATH"], "r") as f:
 			settings = json.load(f)
 
 	ctx.obj['serial_settings'] = settings
@@ -30,8 +27,7 @@ def cli(ctx, port, baud, bits, stop):
 @click.argument('blue', type=int)
 def send(ctx, address, bin_number, red, green, blue):
 	packet = struct.pack("BBBBBc", address, bin_number, red, green, blue, "\n".encode("UTF8"))
-	click.echo("Sending {}".format(packet))
-	import pdb; pdb.set_trace()
+	click.echo(packet)
 
 
 if __name__ == "__main__":
