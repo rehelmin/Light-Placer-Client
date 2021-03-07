@@ -49,8 +49,8 @@ def send(ctx, address, bin_number, red, green, blue):
 	if address > 255:
 		logging.error("Address must be less than a value of 255")
 		return
-	if bin_number > 8:
-		logging.error("Address must be less than a value of 8")
+	if bin_number > 16:
+		logging.error("Address must be less than or equal to a value of 16")
 		return
 	if red > 255:
 		logging.error("Red value must be less than a value of 255")
@@ -62,7 +62,8 @@ def send(ctx, address, bin_number, red, green, blue):
 		logging.error("Blue value must be less than a value of 255")
 		return
 
-	packet = struct.pack("BBBBBc", address, bin_number, red, green, blue, "\n".encode("UTF8"))
+	address_data = struct.pack("B", address)
+	packet = struct.pack("BBBBc", bin_number, red, green, blue, "\n".encode("UTF8"))
 	logging.debug("Sending the following packet: {} to controller address {}".format(packet, address))
 
 	if ctx.obj['serial_settings']["data_bits"] == 7:
@@ -83,10 +84,17 @@ def send(ctx, address, bin_number, red, green, blue):
 		parity = serial.PARITY_ODD
 	elif ctx.obj['serial_settings']["parity"].lower() == "even":
 		parity = serial.PARITY_EVEN
+	elif ctx.obj['serial_settings']["parity"].lower() == "mark":
+		parity = serial.PARITY_MARK
 	else:
 		parity = serial.PARITY_NONE
 
-	ser = serial.Serial(ctx.obj["serial_settings"]["port"], int(ctx.obj["serial_settings"]["baud"]), bytesize=data_bits, stopbits=stop_bits, parity=parity)
+	# Use parity bit for 9 bit master/slave communication
+	ser = serial.Serial(ctx.obj["serial_settings"]["port"], int(ctx.obj["serial_settings"]["baud"]), bytesize=data_bits, stopbits=stop_bits, parity=serial.PARITY_MARK)
+	ser.write(address_data)
+	ser.close()
+
+	ser = serial.Serial(ctx.obj["serial_settings"]["port"], int(ctx.obj["serial_settings"]["baud"]), bytesize=data_bits, stopbits=stop_bits, parity=serial.PARITY_SPACE)
 	ser.write(packet)
 	ser.close()
 

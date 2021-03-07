@@ -1,7 +1,7 @@
 {
 	"port": "COM4",
-	"baud": 115200,
+	"baud": 9600,
 	"data_bits": 8,
 	"stop_bits": 1,
-	"parity": "None"
+	"parity": "Mark"
 }
